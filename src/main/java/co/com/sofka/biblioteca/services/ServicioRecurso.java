@@ -22,7 +22,7 @@ public class ServicioRecurso {
         return mapper.fromCollectionList(recursos);
     }
     public RecursoDTO obtenerPorId(String id) {
-        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
         return mapper.fromCollection(recurso);
     }
     public RecursoDTO crear(RecursoDTO recursoDTO) {
@@ -34,9 +34,9 @@ public class ServicioRecurso {
     }
     private boolean sonVacios(RecursoDTO recursoDTO){
         if (recursoDTO.getName().isEmpty() || recursoDTO.getThematic().isEmpty() || recursoDTO.getType().isEmpty()) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
     public RecursoDTO modificar(RecursoDTO recursoDTO) {
         Recurso recurso = mapper.fromDTO(recursoDTO);
@@ -58,7 +58,7 @@ public class ServicioRecurso {
     public String loanApplication(String id){
         Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
         if (!recurso.isAvailable()) {
-            recurso.setAvailable(true);
+            recurso.setAvailable(false);
             recurso.setDate(LocalDate.now());
             RecursoDTO recursoDTO = mapper.fromCollection(recurso);
             modificar(recursoDTO);
@@ -70,7 +70,7 @@ public class ServicioRecurso {
     public String returnRequest(String id){
         Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
         if (recurso.isAvailable()) {
-            recurso.setAvailable(false);
+            recurso.setAvailable(true);
             LocalDate date = LocalDate.of(9999, 12, 31);
             recurso.setDate(date);
             RecursoDTO recursoDTO = mapper.fromCollection(recurso);

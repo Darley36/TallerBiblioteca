@@ -20,7 +20,12 @@ public class ControladorRecurso {
 
     @GetMapping("/{id}")
     public ResponseEntity<RecursoDTO> findbyId(@PathVariable("id") String id) {
-        return new ResponseEntity(servicioRecurso.obtenerPorId(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity(servicioRecurso.obtenerPorId(id), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity("Recurso no esta",HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping()
@@ -48,9 +53,20 @@ public class ControladorRecurso {
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Recurso no esta",HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/disponible/{id}")
+    public ResponseEntity findAvailable(@PathVariable("id") String id) {
+        return new ResponseEntity(servicioRecurso.availavility(id), HttpStatus.OK);
+    }
+/*
+    @GetMapping("/disponible/{id}")
+    public ResponseEntity loanApplication(@PathVariable("id") String id) {
+        return new ResponseEntity(servicioRecurso.availavility(id), HttpStatus.OK);
+    }
+*/
 
 
 }
