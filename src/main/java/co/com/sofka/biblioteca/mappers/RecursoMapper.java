@@ -14,6 +14,7 @@ public class RecursoMapper {
         recurso.setId(dto.getId());
         recurso.setName(dto.getName());
         recurso.setDate(dto.getDate());
+        recurso.setType(dto.getType());
         recurso.setAvailable(dto.isAvailable());
         recurso.setThematic(dto.getThematic());
         recurso.setQuantityAvailable(dto.getQuantityAvailable());
@@ -27,6 +28,7 @@ public class RecursoMapper {
         recursoDTO.setId(collection.getId());
         recursoDTO.setName(collection.getName());
         recursoDTO.setDate(collection.getDate());
+        recursoDTO.setType(collection.getType());
         recursoDTO.setAvailable(collection.isAvailable());
         recursoDTO.setThematic(collection.getThematic());
         recursoDTO.setQuantityAvailable(collection.getQuantityAvailable());
