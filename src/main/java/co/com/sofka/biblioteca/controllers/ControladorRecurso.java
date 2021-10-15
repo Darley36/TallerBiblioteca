@@ -61,12 +61,31 @@ public class ControladorRecurso {
     public ResponseEntity findAvailable(@PathVariable("id") String id) {
         return new ResponseEntity(servicioRecurso.availavility(id), HttpStatus.OK);
     }
-/*
-    @GetMapping("/disponible/{id}")
-    public ResponseEntity loanApplication(@PathVariable("id") String id) {
-        return new ResponseEntity(servicioRecurso.availavility(id), HttpStatus.OK);
-    }
-*/
 
+    @PutMapping("/prestar/{id}")
+    public ResponseEntity loanApplication(@PathVariable("id") String id) {
+        return new ResponseEntity(servicioRecurso.loanApplication(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/devolver/{id}")
+    public ResponseEntity returnRequest(@PathVariable("id") String id) {
+        return new ResponseEntity(servicioRecurso.returnRequest(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/recomendar/{thematic}")
+    public ResponseEntity<RecursoDTO> recommendation(@PathVariable("thematic") String thematic){
+        if(thematic.equals("")){
+            return new ResponseEntity("Tema no existe ",HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(servicioRecurso.recommendTheme(thematic),HttpStatus.OK);
+    }
+
+    @GetMapping("/recomendarTipo/{type}")
+    public ResponseEntity<RecursoDTO> recommendationByType(@PathVariable("type") String type){
+        if(type.equals("")){
+            return new ResponseEntity("El tipo no existe ",HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(servicioRecurso.recommendType(type),HttpStatus.OK);
+    }
 
 }

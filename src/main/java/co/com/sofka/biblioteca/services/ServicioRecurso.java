@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class ServicioRecurso {
     }
     public RecursoDTO modificar(RecursoDTO recursoDTO) {
         Recurso recurso = mapper.fromDTO(recursoDTO);
-        repositorioRecurso.findById(recurso.getId()).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+        repositorioRecurso.findById(recurso.getId()).orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
         return mapper.fromCollection(repositorioRecurso.save(recurso));
     }
     public void borrar(String id) {
@@ -48,16 +49,16 @@ public class ServicioRecurso {
     }
 
     public String availavility(String id){
-        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
         if (recurso.isAvailable()) {
-            return "El recurso " + recurso.getName() + "se encuentra disponible";
+            return "El recurso " + recurso.getName() + " se encuentra disponible";
         }
-        return "El recurso " + recurso.getName() + "no se encuentra disponible";
+        return "El recurso " + recurso.getName() + " no se encuentra disponible";
     }
 
     public String loanApplication(String id){
-        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-        if (!recurso.isAvailable()) {
+        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
+        if (recurso.isAvailable()) {
             recurso.setAvailable(false);
             recurso.setDate(LocalDate.now());
             RecursoDTO recursoDTO = mapper.fromCollection(recurso);
@@ -68,15 +69,31 @@ public class ServicioRecurso {
     }
 
     public String returnRequest(String id){
-        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-        if (recurso.isAvailable()) {
+        Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
+        if (!recurso.isAvailable()) {
             recurso.setAvailable(true);
             LocalDate date = LocalDate.of(9999, 12, 31);
             recurso.setDate(date);
             RecursoDTO recursoDTO = mapper.fromCollection(recurso);
             modificar(recursoDTO);
-            return "El recurso " + recursoDTO.getName() + " se ha prestado";
+            return "El recurso " + recursoDTO.getName() + " se ha devuelto";
         }
-        return "el recurso " + recurso.getName() + " no tiene derechos para prestamo";
+        return "el recurso " + recurso.getName() + " no se pudo devolver";
     }
+
+    public List<RecursoDTO> recommendTheme(String theme) {
+        //List<Recurso> recursos = (List<Recurso>) repositorioRecurso.findAll();
+        List<RecursoDTO> recursoDTOS = new ArrayList<>();
+        repositorioRecurso.findByThematic(theme).forEach(recurso -> recursoDTOS.add(mapper.fromCollection(recurso)));
+        return recursoDTOS;
+    }
+
+    public List<RecursoDTO> recommendType(String type) {
+        //List<Recurso> recursos = (List<Recurso>) repositorioRecurso.findAll();
+        List<RecursoDTO> recursoDTOS = new ArrayList<>();
+        repositorioRecurso.findByType(type).forEach(recurso -> recursoDTOS.add(mapper.fromCollection(recurso)));
+        return recursoDTOS;
+    }
+
+
 }
