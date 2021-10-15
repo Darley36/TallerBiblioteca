@@ -118,7 +118,7 @@ class ServicioRecursoTest {
     }
 
 
-    //Todavia no funciona
+
     @Test
     @DisplayName("Test find resource by id")
     public void modificar() {
@@ -133,7 +133,7 @@ class ServicioRecursoTest {
         recurso1.setQuantityBorrowed(1);
         recurso1.setQuantityAvailable(1);
 
-       /*var recurso2 = new Recurso();
+       var recurso2 = new Recurso();
        recurso2.setId("1");
        recurso2.setAvailable(true);
        recurso2.setDate(LocalDate.parse("2021-01-01"));
@@ -141,10 +141,10 @@ class ServicioRecursoTest {
        recurso2.setThematic("Terror");
        recurso2.setName("The black");
        recurso2.setQuantityBorrowed(1);
-       recurso2.setQuantityAvailable(1);*/
+       recurso2.setQuantityAvailable(1);
 
         Mockito.when(repositorioRecurso.save(any())).thenReturn(mapper.fromDTO(recurso1));
-        Mockito.when(repositorioRecurso.findById(recurso1.getId())).thenReturn(recursos().stream().findFirst());
+        Mockito.when(repositorioRecurso.findById(recurso1.getId())).thenReturn(java.util.Optional.of(recurso2));
         var resultado = servicioRecurso.modificar(recurso1);
 
         Assertions.assertNotNull(resultado, "el valor guardado no debe ser nulo");
@@ -158,7 +158,97 @@ class ServicioRecursoTest {
        Assertions.assertEquals(1, resultado.getQuantityBorrowed(), "el tipo no corresponde");
     }
 
-    private List<Recurso> recursos() {
+    @Test
+    @DisplayName("Test find resource by id")
+    public void modificar2() {
+
+        var recurso1 = new RecursoDTO();
+        recurso1.setId("1");
+        recurso1.setAvailable(true);
+        recurso1.setDate(LocalDate.parse("2021-01-01"));
+        recurso1.setType("libro");
+        recurso1.setThematic("Terror");
+        recurso1.setName("The black");
+        recurso1.setQuantityBorrowed(1);
+        recurso1.setQuantityAvailable(1);
+
+        Mockito.when(repositorioRecurso.save(any())).thenReturn(mapper.fromDTO(recurso1));
+        Mockito.when(repositorioRecurso.findById(recurso1.getId())).thenReturn(recursos().stream().findFirst());
+        var resultado = servicioRecurso.modificar(recurso1);
+
+        Assertions.assertNotNull(resultado, "el valor guardado no debe ser nulo");
+        Assertions.assertEquals("1", resultado.getId(), "el nombre no corresponde");
+        Assertions.assertEquals(true, resultado.isAvailable(), "el tipo no corresponde");
+        Assertions.assertEquals(LocalDate.parse("2021-01-01"), resultado.getDate(), "el nombre no corresponde");
+        Assertions.assertEquals("libro", resultado.getType(), "el tipo no corresponde");
+        Assertions.assertEquals("The black", resultado.getName(), "el nombre no corresponde");
+        Assertions.assertEquals("Terror", resultado.getThematic(), "el tipo no corresponde");
+        Assertions.assertEquals(1, resultado.getQuantityAvailable(), "el nombre no corresponde");
+        Assertions.assertEquals(1, resultado.getQuantityBorrowed(), "el tipo no corresponde");
+    }
+
+    @Test
+    @DisplayName("loan Application")
+    public void aplicarPrestamo() {
+        var recurso1 = new RecursoDTO();
+        recurso1.setId("1");
+        recurso1.setAvailable(false);
+        recurso1.setDate(LocalDate.parse("2021-01-01"));
+        recurso1.setType("libro");
+        recurso1.setThematic("Terror");
+        recurso1.setName("The black");
+        recurso1.setQuantityBorrowed(1);
+        recurso1.setQuantityAvailable(1);
+
+        Mockito.when(repositorioRecurso.save(any())).thenReturn(mapper.fromDTO(recurso1));
+        Mockito.when(repositorioRecurso.findById(recurso1.getId())).thenReturn(recursos().stream().findFirst());
+        var resultado = servicioRecurso.loanApplication(recurso1.getId());
+
+        Assertions.assertEquals("El recurso " + recurso1.getName() + " se ha prestado", resultado);
+    }
+
+    @Test
+    @DisplayName("checkear disponibilidad")
+    public void availability() {
+        var recurso1 = new RecursoDTO();
+        recurso1.setId("1");
+        recurso1.setAvailable(false);
+        recurso1.setDate(LocalDate.parse("2021-01-01"));
+        recurso1.setType("libro");
+        recurso1.setThematic("Terror");
+        recurso1.setName("The black");
+        recurso1.setQuantityBorrowed(1);
+        recurso1.setQuantityAvailable(1);
+
+        Mockito.when(repositorioRecurso.save(any())).thenReturn(mapper.fromDTO(recurso1));
+        Mockito.when(repositorioRecurso.findById(recurso1.getId())).thenReturn(recursos().stream().findFirst());
+        var resultado = servicioRecurso.availability(recurso1.getId());
+
+        Assertions.assertEquals("El recurso " + recurso1.getName() + " se encuentra disponible", resultado);
+    }
+
+    @Test
+    @DisplayName("solicitud de disponibilidad")
+    public void returnRequest() {
+        var recurso1 = new RecursoDTO();
+        recurso1.setId("1");
+        recurso1.setAvailable(false);
+        recurso1.setDate(LocalDate.parse("2021-01-01"));
+        recurso1.setType("libro");
+        recurso1.setThematic("Terror");
+        recurso1.setName("The black");
+        recurso1.setQuantityBorrowed(1);
+        recurso1.setQuantityAvailable(1);
+
+        Mockito.when(repositorioRecurso.save(any())).thenReturn(mapper.fromDTO(recurso1));
+        Mockito.when(repositorioRecurso.findById(recurso1.getId())).thenReturn(recursos().stream().findFirst());
+        var resultado = servicioRecurso.returnRequest(recurso1.getId());
+
+        Assertions.assertEquals("El recurso " + recurso1.getName() + " no se pudo devolver", resultado);
+    }
+
+
+        private List<Recurso> recursos() {
 
         var recursos = new ArrayList<Recurso>();
         var recurso2 = new Recurso();

@@ -48,7 +48,7 @@ public class ServicioRecurso {
         repositorioRecurso.deleteById(id);
     }
 
-    public String availavility(String id){
+    public String availability(String id){
         Recurso recurso = repositorioRecurso.findById(id).orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
         if (recurso.isAvailable()) {
             return "El recurso " + recurso.getName() + " se encuentra disponible";
@@ -78,7 +78,7 @@ public class ServicioRecurso {
             modificar(recursoDTO);
             return "El recurso " + recursoDTO.getName() + " se ha devuelto";
         }
-        return "el recurso " + recurso.getName() + " no se pudo devolver";
+        return "El recurso " + recurso.getName() + " no se pudo devolver";
     }
 
     public List<RecursoDTO> recommendTheme(String theme) {

@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.directory.SearchResult;
 import java.util.List;
 
 @RestController
@@ -59,7 +58,7 @@ public class ControladorRecurso {
 
     @GetMapping("/disponible/{id}")
     public ResponseEntity findAvailable(@PathVariable("id") String id) {
-        return new ResponseEntity(servicioRecurso.availavility(id), HttpStatus.OK);
+        return new ResponseEntity(servicioRecurso.availability(id), HttpStatus.OK);
     }
 
     @PutMapping("/prestar/{id}")
